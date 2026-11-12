@@ -4,7 +4,7 @@ const D=[
 {i:'c',n:'Controls & Software',e:'02 / AUTONOMY, EMBEDDED SYSTEMS & SOFTWARE',b:'Developing the intelligence of the aircraft, from autopilot and embedded systems to onboard computing.',d:'The Controls & Software Department develops the intelligence and digital systems behind the aircraft: flight-control configuration, embedded programming, sensor integration, companion-computer applications and the software tools used to monitor and operate the drone.',l:['Flight controller and autopilot: Pixhawk setup, ArduPilot configuration, flight modes, calibration, tuning and failsafe logic','Embedded systems and firmware: microcontroller programming, peripheral interfacing, debugging and hardware–software integration','Sensors and data acquisition: interfacing, calibration, validation, data logging and processing','Companion computing: Raspberry Pi integration, onboard scripts, MAVLink-based applications and edge processing','Ground software and dashboards: telemetry visualisation, mission-support tools and operator interfaces','Software engineering: website and digital infrastructure, version control, testing and documentation']},
 {i:'r',n:'Communication',e:'03 / CONNECTIVITY & DATA LINKS',b:'Connecting the aircraft and ground systems through reliable telemetry, radio and video links.',d:'The Communication Department keeps the aircraft, ground station and supporting systems connected. It focuses on reliable data exchange, radio-frequency links and video transmission across the complete UAV system.',l:['Telemetry radio setup, configuration and link testing','RF components, antennas, frequency planning and placement','Video transmission systems and camera-to-transmitter integration','Communication protocols, serial interfaces and data-link troubleshooting','Ground-station connectivity, range checks and link reliability']},
 {i:'e',n:'Electrical',e:'04 / POWER & ELECTRICAL INTEGRATION',b:'Designing the electrical backbone: power distribution, propulsion electronics and wiring.',d:'The Electrical Department develops and maintains the aircraft’s electrical backbone. It is responsible for power delivery, propulsion electronics, electrical safety and the wiring that allows every subsystem to work together.',l:['Battery selection, monitoring and power-system planning','Power distribution boards, wiring harnesses and connectors','ESC, motor and propulsion-system electrical integration','BECs, UBECs, buck converters and regulated power rails','Electrical protection, grounding, continuity checks and fault diagnosis','Electrical documentation, inspection and integration testing']}];
-const nv=document.getElementById('nv');document.getElementById('mt').onclick=()=>nv.classList.toggle('open');nv.onclick=e=>{if(e.target.closest('a'))nv.classList.remove('open')};
+const nv=document.getElementById('nv'),mt=document.getElementById('mt');mt.onclick=()=>{nv.classList.toggle('open');mt.setAttribute('aria-expanded',nv.classList.contains('open'))};nv.onclick=e=>{if(e.target.closest('a')){nv.classList.remove('open');mt.setAttribute('aria-expanded','false')}};
 const gt=document.getElementById('gt');gt.innerHTML+=gt.innerHTML;
 const dg=document.getElementById('dg'),dlg=document.getElementById('dlg');
 dg.innerHTML=D.map((d,j)=>`<button class="dt" data-j="${j}"><svg viewBox="0 0 64 64">${IC[d.i]}</svg><div><small>0${j+1}</small><h3>${d.n}</h3></div><div class="bl"><p>${d.b}</p><b>OPEN DEPARTMENT ↗</b></div></button>`).join('');
@@ -16,11 +16,11 @@ dlg.onclick=e=>{if(e.target===dlg)dlg.close()};
 const T=THREE,el=document.getElementById('stage'),R=new T.WebGLRenderer({antialias:true,alpha:true});
 R.setPixelRatio(Math.min(devicePixelRatio,2));el.prepend(R.domElement);
 const S=new T.Scene(),C=new T.PerspectiveCamera(32,1,.1,100),g=new T.Group();S.add(g);
-S.add(new T.HemisphereLight(0xcfe8ff,0x202830,1.3));const dl2=new T.DirectionalLight(0xffffff,1.4);dl2.position.set(4,8,6);S.add(dl2);
+S.add(new T.HemisphereLight(0xd8fff6,0x1a2422,1.3));const dl2=new T.DirectionalLight(0xffffff,1.4);dl2.position.set(4,8,6);S.add(dl2);
 const mk=(c,o)=>new T.MeshBasicMaterial({color:c,transparent:true,opacity:o,depthWrite:false});
-const F=mk(0x0e2236,.55),FO=mk(0x5a2a10,.7);
-const SB=new T.MeshStandardMaterial({color:0x3b424a,metalness:.65,roughness:.38}),SO=new T.MeshStandardMaterial({color:0xff7626,metalness:.3,roughness:.45});
-const LB=new T.LineBasicMaterial({color:0x8fd0ff,transparent:true,opacity:.8}),LO=new T.LineBasicMaterial({color:0xff9a5a});
+const F=mk(0x0e2420,.55),FO=mk(0x5a2a10,.7);
+const SB=new T.MeshStandardMaterial({color:0x3b424a,metalness:.65,roughness:.38}),SO=new T.MeshStandardMaterial({color:0xff6a1a,metalness:.3,roughness:.45});
+const LB=new T.LineBasicMaterial({color:0x7adfff,transparent:true,opacity:.8}),LO=new T.LineBasicMaterial({color:0xff9a5a});
 const parts=[];
 function P(geo,x,y,z,o){o=o||{};const m=new T.Mesh(geo,o.or?FO:F),l=new T.LineSegments(new T.EdgesGeometry(geo,o.th||22),o.or?LO:LB);m.add(l);m.position.set(x,y,z);if(o.r)m.rotation.set(o.r[0],o.r[1],o.r[2]);(o.p||g).add(m);parts.push([m,l,!!o.or]);return m}
 const Cy=(a,b,h,s)=>new T.CylinderGeometry(a,b,h,s||32),Bx=(a,b,c)=>new T.BoxGeometry(a,b,c),Sp=(r)=>new T.SphereGeometry(r,16,10);
@@ -46,7 +46,7 @@ for(let k=0;k<12;k++){const a=k*Math.PI/6;P(Bx(.03,.1,.02),Math.cos(a)*.245,.3,M
 P(Cy(.17,.2,.04,32),0,.42,0,{p:mg});P(Cy(.07,.07,.07,24),0,.47,0,{p:mg,or:1});P(Cy(.035,.035,.04,6),0,.53,0,{p:mg,or:1});
 const pg=new T.Group();pg.position.set(0,.56,0);mg.add(pg);
 P(bg,0,0,0,{p:pg,r:[.14,0,0]});P(bg,0,0,0,{p:pg,r:[-.14,Math.PI,0]});P(Cy(.1,.1,.04,24),0,0,0,{p:pg,or:1});
-const rg=new T.Mesh(new T.RingGeometry(.96,1,64),new T.MeshBasicMaterial({color:0x8fd0ff,transparent:true,opacity:.2,side:2,depthWrite:false}));rg.rotation.x=-Math.PI/2;pg.add(rg);
+const rg=new T.Mesh(new T.RingGeometry(.96,1,64),new T.MeshBasicMaterial({color:0x7adfff,transparent:true,opacity:.2,side:2,depthWrite:false}));rg.rotation.x=-Math.PI/2;pg.add(rg);
 props.push([pg,i%2?.45:-.45]);if(!i){pg0=pg;bell0=bell;arm0=arm}
 // landing leg
 const top=[sx*.62,-.3,sz*.42],ft=[sx*1.15,-1.02,sz*.42];const lg=between(top,ft,.05,.04,10);if(i==3)leg0=lg;P(Sp(.07),...top,{th:25});P(Sp(.06),...ft,{th:25})});
@@ -58,8 +58,8 @@ between([0,.28,-.55],[0,.76,-.55],.02,.02,8);const gps=P(Cy(.2,.22,.06,32),0,.79
 P(Bx(.22,.14,.12),0,-.2,.72);P(new T.TorusGeometry(.2,.025,8,24,Math.PI),0,-.38,.8,{r:[0,Math.PI/2,Math.PI]});
 const cam=P(Bx(.3,.26,.3),0,-.4,.82);P(Cy(.1,.1,.12,24),0,-.4,1.02,{r:[Math.PI/2,0,0]});P(Cy(.07,.07,.14,24),0,-.4,1.03,{r:[Math.PI/2,0,0]});P(new T.TorusGeometry(.1,.012,8,24),0,-.4,1.09,{or:1});
 // ground reference
-const gr=new T.GridHelper(10,40,0x24496b,0x172c42);gr.position.y=-1.15;S.add(gr);
-[2.7,3.8].forEach(r=>{const q=new T.Mesh(new T.RingGeometry(r,r+.015,96),new T.MeshBasicMaterial({color:0x8fd0ff,transparent:true,opacity:.3,side:2}));q.rotation.x=-Math.PI/2;q.position.y=-1.14;S.add(q)});
+const gr=new T.GridHelper(10,40,0x1c6b5e,0x12362f);gr.position.y=-1.15;S.add(gr);
+[2.7,3.8].forEach(r=>{const q=new T.Mesh(new T.RingGeometry(r,r+.015,96),new T.MeshBasicMaterial({color:0x7adfff,transparent:true,opacity:.3,side:2}));q.rotation.x=-Math.PI/2;q.position.y=-1.14;S.add(q)});
 // markers
 const H=[['PROPELLER','Converts motor torque into lift. Pairs spin in opposite directions so the aircraft stays steady in yaw.',pg0],['BRUSHLESS MOTOR','Spins the propeller. Its size and KV rating decide how much thrust the aircraft can produce.',bell0],['CARBON ARM','Carries each motor away from the centre. It has to be stiff enough to resist vibration and light enough to save weight.',arm0],['FLIGHT CONTROLLER','The brain of the aircraft. It reads the sensors and adjusts every motor many times a second to keep it stable.',fcp],['GPS MODULE','Raised on a mast, away from other electronics, for a clean signal. It provides position for navigation and return-to-home.',gps],['BATTERY BAY','Holds the flight battery under the fuselage. Capacity and discharge rating set flight time and available power.',bat],['GIMBAL CAMERA','Keeps the camera steady while the aircraft moves, for clear video and imaging.',cam],['LANDING GEAR','Protects the airframe, gimbal and payload during take-off and landing.',leg0]];
 const info=document.getElementById('info'),tags=H.map((h,i)=>{const b=document.createElement('button');b.className='mk';b.innerHTML=(i+1)+'<em>'+h[0]+'</em>';b.setAttribute('aria-label',h[0]);b.onclick=()=>{tags.forEach(t=>t.classList.remove('on'));b.classList.add('on');info.innerHTML=`<b>${i+1}. ${h[0]}</b>${h[1]}`};el.append(b);return b});
